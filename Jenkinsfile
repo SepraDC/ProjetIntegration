@@ -31,7 +31,7 @@ pipeline {
                 * using`true` to allowthe Pipeline to continue nonetheless
                 */
                 sh 'make check || true'
-                junit '**/target/*.xml'
+                junit '**/target/surefire-reports/**/*.xml'
             }
         }
     }
