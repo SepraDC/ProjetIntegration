@@ -1,28 +1,28 @@
 pipeline {
-    agent none
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
-    }
+    agent any
+
     stages {
-        stage('Build') {
-            agent any
+        stage ('Build') {
             steps {
-                checkout scm
-                sh 'make'
-                stash includes: '**/target/*.jar', name: 'app'
-            }
-        }
-        stage('Test') {
-            steps {
-                unstash 'app'
-                sh 'make check'
+                sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
             post {
-                always {
-                    junit '**/target/*.xml'
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
+        }
+        stage ('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
                 }
             }
         }
     }
 }
+
+
