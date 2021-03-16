@@ -16,7 +16,7 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'make'
+                sh './configure && make'
                 archiveArtifacts artifacts: '**/target/surefire-reports/**/*.jar', fingerprint: true
             }
         }
