@@ -1,33 +1,27 @@
 pipeline {
-    agent any
+    agent none
     tools {
         maven 'Maven 3.3.9'
         jdk 'jdk8'
     }
     stages {
-        stage ('Initialize') {
+        stage('Build') {
+            agent any
             steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
+                checkout scm
+                sh 'make'
+                stash includes: '**/target/*.jar', name: 'app'
             }
         }
-
-        stage ('Build') {
-            steps {
-                sh './configure && make'
-                archiveArtifacts artifacts: '**/target/surefire-reports/**/*.jar', fingerprint: true
-            }
-        }
-
         stage('Test') {
             steps {
-                /* `make check` returns non-zero on test failures,
-                * using `true` to allow the Pipeline to continue nonetheless
-                */
-                sh 'make check || true'
-                junit '**/target/surefire-reports/**/*.xml'
+                unstash 'app'
+                sh 'make check'
+            }
+            post {
+                always {
+                    junit '**/target/*.xml'
+                }
             }
         }
     }
