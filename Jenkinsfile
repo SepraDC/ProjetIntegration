@@ -24,5 +24,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Test') {
+            steps {
+                /* `makecheck` returnsnon-zeroon test failures,
+                * using`true` to allowthe Pipeline to continue nonetheless
+                */
+                sh 'makecheck || true' junit'**/target/*.xml'
+            }
+        }
     }
 }
