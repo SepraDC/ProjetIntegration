@@ -3,13 +3,13 @@ package ovh.sepradc;
 import junit.framework.TestCase;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 
 public class COVIDLibTest extends TestCase {
     private NormalDistribution n;
     private COVIDLib covidLib;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         this.n = new NormalDistribution();
         this.covidLib = new COVIDLib();
