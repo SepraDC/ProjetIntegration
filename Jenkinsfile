@@ -17,7 +17,7 @@ pipeline {
         stage ('Build') {
             steps {
                 sh 'make'
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: '**/target/surefire-reports/**/*.jar', fingerprint: true
             }
         }
 
@@ -27,7 +27,7 @@ pipeline {
                 * using `true` to allow the Pipeline to continue nonetheless
                 */
                 sh 'make check || true'
-                junit '**/target/*.xml'
+                junit '**/target/surefire-reports/**/*.xml'
             }
         }
     }
